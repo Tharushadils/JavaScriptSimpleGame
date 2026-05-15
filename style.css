@@ -1,83 +1,100 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     overflow: hidden;
     font-family: Arial, sans-serif;
+    background: black;
 }
 
-#gameArea{
+#game-container {
     width: 100vw;
     height: 100vh;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(to bottom,#87ceeb,#dff6ff);
+    background: #111;
 }
 
-#board{
+#player {
+    width: 100px;
+    height: 10px;
+    background: rgb(0, 47, 255);
+    position: absolute;
+    bottom: 30px;
+    left: 100px;
+    border-radius: 10px;
+}
+
+.bullet {
+    width: 10px;
+    height: 20px;
+    background: yellow;
+    position: absolute;
+    border-radius: 5px;
+}
+
+.enemy {
+    width: 50px;
+    height: 50px;
+    background: rgb(23, 205, 7);
+    position: absolute;
+    border-radius: 10px;
+}
+
+#scoreboard {
     position: fixed;
     top: 10px;
-    left: 15px;
-    z-index: 999;
-    color: #222;
+    left: 10px;
+    color: white;
+    font-size: 22px;
+    z-index: 9999;
 }
 
-#board h2{
-    margin-bottom: 5px;
-}
-
-#levelPanel{
+#settingsBtn {
     position: fixed;
     top: 10px;
     right: 10px;
-    z-index: 999;
-}
-
-.levelBtn{
     padding: 10px 15px;
-    border: none;
     background: #222;
     color: white;
-    margin-left: 5px;
+    border: none;
     border-radius: 8px;
     cursor: pointer;
+    font-size: 18px;
+    z-index: 9999;
 }
 
-.levelBtn:hover{
+#settingsMenu {
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    width: 200px;
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+    display: none;
+    z-index: 9999;
+}
+
+#settingsMenu h3 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.levelBtn {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
     background: #444;
+    color: white;
+    font-size: 16px;
 }
 
-#basket{
-    width: 140px;
-    height: 60px;
-    background: brown;
-    position: absolute;
-    bottom: 25px;
-    left: 100px;
-    border-radius: 0 0 25px 25px;
-    border: 5px solid #5c2e00;
-    border-top: none;
-}
-
-.fruit{
-    width: 50px;
-    height: 50px;
-    background: red;
-    border-radius: 50%;
-    position: absolute;
-    box-shadow: inset -5px -5px rgba(0,0,0,0.2);
-}
-
-.fruit::before{
-    content: "";
-    width: 12px;
-    height: 12px;
-    background: green;
-    position: absolute;
-    top: -5px;
-    left: 20px;
-    border-radius: 50%;
+.levelBtn:hover {
+    background: #666;
 }
