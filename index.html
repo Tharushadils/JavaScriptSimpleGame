@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fruit Catcher Game</title>
+    <title>Shooter Game</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -11,32 +11,29 @@
 </head>
 <body>
 
-<div id="board">
+    <div id="scoreboard">
+        <div>Score: <span id="score">0</span></div>
+        <div>Level: <span id="level">1</span></div>
+    </div>
 
-    <h2>Fruit Catcher</h2>
+    <div id="game-container">
 
-    <p>Score : <span id="score">0</span></p>
+        <div id="player"></div>
 
-    <p>Level : <span id="level">1</span></p>
+    </div>
 
-</div>
+    <button id="settingsBtn"> Settings</button>
 
-<div id="gameArea">
+    <div id="settingsMenu">
+        <h3>Select Level</h3>
 
-    <div id="basket"></div>
+        <button class="levelBtn" data-level="1">Level 1</button>
+        <button class="levelBtn" data-level="2">Level 2</button>
+        <button class="levelBtn" data-level="3">Level 3</button>
+        <button class="levelBtn" data-level="4">Level 4</button>
+    </div>
 
-</div>
-
-<div id="levelPanel">
-
-    <button class="levelBtn" data-level="1">Level 1</button>
-    <button class="levelBtn" data-level="2">Level 2</button>
-    <button class="levelBtn" data-level="3">Level 3</button>
-    <button class="levelBtn" data-level="4">Level 4</button>
-
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
