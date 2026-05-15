@@ -1,100 +1,83 @@
-* {
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
+body{
     overflow: hidden;
     font-family: Arial, sans-serif;
-    background: black;
 }
 
-#game-container {
+#gameArea{
     width: 100vw;
     height: 100vh;
     position: relative;
     overflow: hidden;
-    background: #111;
+    background: linear-gradient(to bottom,#87ceeb,#dff6ff);
 }
 
-#player {
-    width: 100px;
-    height: 10px;
-    background: cyan;
+#board{
+    position: fixed;
+    top: 10px;
+    left: 15px;
+    z-index: 999;
+    color: #222;
+}
+
+#board h2{
+    margin-bottom: 5px;
+}
+
+#levelPanel{
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 999;
+}
+
+.levelBtn{
+    padding: 10px 15px;
+    border: none;
+    background: #222;
+    color: white;
+    margin-left: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.levelBtn:hover{
+    background: #444;
+}
+
+#basket{
+    width: 140px;
+    height: 60px;
+    background: brown;
     position: absolute;
-    bottom: 30px;
+    bottom: 25px;
     left: 100px;
-    border-radius: 10px;
+    border-radius: 0 0 25px 25px;
+    border: 5px solid #5c2e00;
+    border-top: none;
 }
 
-.bullet {
-    width: 10px;
-    height: 20px;
-    background: yellow;
-    position: absolute;
-    border-radius: 5px;
-}
-
-.enemy {
+.fruit{
     width: 50px;
     height: 50px;
     background: red;
+    border-radius: 50%;
     position: absolute;
-    border-radius: 10px;
+    box-shadow: inset -5px -5px rgba(0,0,0,0.2);
 }
 
-#scoreboard {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-size: 22px;
-    z-index: 9999;
-}
-
-#settingsBtn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    padding: 10px 15px;
-    background: #222;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 18px;
-    z-index: 9999;
-}
-
-#settingsMenu {
-    position: fixed;
-    top: 60px;
-    right: 10px;
-    width: 200px;
-    background: #222;
-    padding: 15px;
-    border-radius: 10px;
-    display: none;
-    z-index: 9999;
-}
-
-#settingsMenu h3 {
-    color: white;
-    margin-bottom: 10px;
-}
-
-.levelBtn {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 5px;
-    background: #444;
-    color: white;
-    font-size: 16px;
-}
-
-.levelBtn:hover {
-    background: #666;
+.fruit::before{
+    content: "";
+    width: 12px;
+    height: 12px;
+    background: green;
+    position: absolute;
+    top: -5px;
+    left: 20px;
+    border-radius: 50%;
 }
