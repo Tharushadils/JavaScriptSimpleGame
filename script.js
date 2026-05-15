@@ -1,286 +1,147 @@
-let game;
+let score = 0;
 
-class Game {
+let currentLevel = 1;
 
-    constructor() {
+let basket = $("#basket");
 
-        this.score = 0;
-        this.level = 1;
+let gameRunning = true;
 
-        this.enemies = [];
-        this.bullets = [];
+let fruitSpeed = 1;
+let spawnRate = 600;
 
-        this.isGameOver = false;
+let spawnInterval;
 
-        this.levelSettings = {
+const levels = {
 
-            1: { speed: 2, spawnRate: 2000, bg: "#111" },
-            2: { speed: 4, spawnRate: 1500, bg: "#001f3f" },
-            3: { speed: 6, spawnRate: 1000, bg: "#3f0000" },
-            4: { speed: 8, spawnRate: 700, bg: "#003300" }
-        };
+    1: {
+        speed: 2,
+        spawn: 600,
+        bg: "linear-gradient(to bottom,#87ceeb,#dff6ff)"
+    },
 
-        this.enemySpeed = this.levelSettings[1].speed;
-        this.spawnRate = this.levelSettings[1].spawnRate;
+    2: {
+        speed: 4,
+        spawn: 300,
+        bg: "linear-gradient(to bottom,#ffe29f,#ffa99f)"
+    },
 
-        this.init();
+    3: {
+        speed: 6,
+        spawn: 200,
+        bg: "linear-gradient(to bottom,#a18cd1,#fbc2eb)"
+    },
+
+    4: {
+        speed: 8,
+        spawn: 100,
+        bg: "linear-gradient(to bottom,#434343,#000000)"
+    }
+};
+
+$(document).keydown(function (e) {
+
+    let left = parseInt(basket.css("left"));
+
+    if (e.key === "ArrowLeft" && left > 0) {
+
+        basket.css("left", left - 40 + "px");
     }
 
-    init() {
+    if (e.key === "ArrowRight" && left < window.innerWidth - 140) {
 
-        $(document).on("keydown", (e) => this.handleInput(e));
-
-        this.startSpawning();
-
-        this.applyLevelStyle();
-
-        this.gameLoop();
+        basket.css("left", left + 40 + "px");
     }
-
-    startSpawning() {
-
-        clearInterval(this.spawnTimer);
-
-        this.spawnTimer = setInterval(() => {
-
-            this.spawnEnemy();
-
-        }, this.spawnRate);
-    }
-
-    handleInput(e) {
-
-        e.preventDefault();
-
-        let player = $("#player");
-
-        let pos = parseInt(player.css("left")) || 0;
-
-        // LEFT
-        if (e.key === "ArrowLeft" && pos > 0) {
-
-            player.css("left", (pos - 30) + "px");
-        }
-
-        // RIGHT
-        if (e.key === "ArrowRight" && pos < window.innerWidth - 80) {
-
-            player.css("left", (pos + 30) + "px");
-        }
-
-        // SHOOT
-        if (e.key === " " || e.key === "ArrowUp") {
-
-            this.shoot();
-        }
-    }
-
-    shoot() {
-
-        let player = $("#player");
-
-        let x = parseInt(player.css("left")) + 25;
-
-        let y = $("#player").position().top;
-
-        let bullet = new Bullet(x, y);
-
-        this.bullets.push(bullet);
-    }
-
-    spawnEnemy() {
-
-        if (this.isGameOver) return;
-
-        let x = Math.random() * (window.innerWidth - 60);
-
-        let enemy = new Enemy(x, -60);
-
-        this.enemies.push(enemy);
-    }
-
-    updateScore(points) {
-
-        this.score += points;
-
-        $("#score").text(this.score);
-    }
-
-    changeLevel(newLevel) {
-
-        this.level = newLevel;
-
-        this.enemySpeed = this.levelSettings[newLevel].speed;
-
-        this.spawnRate = this.levelSettings[newLevel].spawnRate;
-
-        $("#level").text(this.level);
-
-        this.startSpawning();
-
-        this.applyLevelStyle();
-
-        alert("LEVEL " + newLevel);
-    }
-
-    applyLevelStyle() {
-
-        $("#game-container").css({
-            background: this.levelSettings[this.level].bg
-        });
-    }
-
-    gameLoop() {
-
-        if (this.isGameOver) return;
-
-        // BULLETS
-        this.bullets.forEach((bullet, bIndex) => {
-
-            bullet.move();
-
-            if (bullet.y < -20) {
-
-                bullet.remove();
-
-                this.bullets.splice(bIndex, 1);
-            }
-        });
-
-        this.enemies.forEach((enemy, eIndex) => {
-
-            enemy.move(this.enemySpeed);
-
-            this.bullets.forEach((bullet, bIndex) => {
-
-                if (enemy.checkCollision(bullet)) {
-
-                    enemy.remove();
-
-                    bullet.remove();
-
-                    this.enemies.splice(eIndex, 1);
-
-                    this.bullets.splice(bIndex, 1);
-
-                    this.updateScore(10);
-                }
-            });
-
-            // GAME OVER
-            if (enemy.y > window.innerHeight) {
-
-                this.gameOver();
-            }
-        });
-
-        requestAnimationFrame(() => this.gameLoop());
-    }
-
-    gameOver() {
-
-        this.isGameOver = true;
-
-        clearInterval(this.spawnTimer);
-
-        alert("Game Over!\nFinal Score: " + this.score);
-
-        location.reload();
-    }
-}
-
-class Bullet {
-
-    constructor(x, y) {
-
-        this.x = x;
-        this.y = y;
-
-        this.element = $("<div class='bullet'></div>");
-
-        this.element.css({
-
-            left: this.x + "px",
-            top: this.y + "px"
-        });
-
-        $("#game-container").append(this.element);
-    }
-
-    move() {
-
-        this.y -= 8;
-
-        this.element.css("top", this.y + "px");
-    }
-
-    remove() {
-
-        this.element.remove();
-    }
-}
-
-class Enemy {
-
-    constructor(x, y) {
-
-        this.x = x;
-        this.y = y;
-
-        this.element = $("<div class='enemy'></div>");
-
-        this.element.css({
-
-            left: this.x + "px",
-            top: this.y + "px"
-        });
-
-        $("#game-container").append(this.element);
-    }
-
-    move(speed) {
-
-        this.y += speed;
-
-        this.element.css("top", this.y + "px");
-    }
-
-    checkCollision(bullet) {
-
-        return (
-
-            bullet.x < this.x + 50 &&
-            bullet.x + 10 > this.x &&
-            bullet.y < this.y + 50 &&
-            bullet.y + 20 > this.y
-        );
-    }
-
-    remove() {
-
-        this.element.remove();
-    }
-}
-
-// START GAME
-$(document).ready(() => {
-
-    game = new Game();
-
-    // SETTINGS
-    $("#settingsBtn").click(() => {
-
-        $("#settingsMenu").toggle();
-    });
-
-    // LEVEL 
-    $(".levelBtn").click(function () {
-
-        let level = parseInt($(this).attr("data-level"));
-
-        game.changeLevel(level);
-
-        $("#settingsMenu").hide();
-    });
-
 });
+
+function createFruit() {
+
+    if (!gameRunning) return;
+
+    let x = Math.random() * (window.innerWidth - 60);
+
+    let fruit = $("<div class='fruit'></div>");
+
+    fruit.css({
+        left: x + "px",
+        top: "-60px"
+    });
+
+    $("#gameArea").append(fruit);
+}
+
+function moveFruits() {
+
+    $(".fruit").each(function () {
+
+        let fruit = $(this);
+
+        let top = parseInt(fruit.css("top"));
+        let left = parseInt(fruit.css("left"));
+
+        fruit.css("top", top + fruitSpeed + "px");
+
+        let basketLeft = parseInt(basket.css("left"));
+        let basketTop = basket.position().top;
+
+        if (
+
+            left < basketLeft + 140 &&
+            left + 50 > basketLeft &&
+            top + 50 > basketTop
+
+        ) {
+
+            fruit.remove();
+
+            score += 10;
+
+            $("#score").text(score);
+        }
+
+        if (top > window.innerHeight) {
+
+            gameRunning = false;
+
+            alert("Game Over!\nFinal Score : " + score);
+
+            location.reload();
+        }
+    });
+
+    requestAnimationFrame(moveFruits);
+}
+
+function startSpawning() {
+
+    clearInterval(spawnInterval);
+
+    spawnInterval = setInterval(createFruit, spawnRate);
+}
+
+function changeLevel(level) {
+
+    currentLevel = level;
+
+    fruitSpeed = levels[level].speed;
+
+    spawnRate = levels[level].spawn;
+
+    $("#level").text(level);
+
+    $("#gameArea").css("background", levels[level].bg);
+
+    startSpawning();
+
+    alert("Level " + level);
+}
+
+$(".levelBtn").click(function () {
+
+    let level = $(this).data("level");
+
+    changeLevel(level);
+});
+
+startSpawning();
+
+moveFruits();
